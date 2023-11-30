@@ -5,6 +5,23 @@
     <title>Title</title>
 </head>
 <body>
-
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript
 </body>
+<script>
+  (async () => {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+      console.log("不支持 enumerateDevices() .");
+    } else {
+      const result = await navigator.mediaDevices.enumerateDevices();
+      for (let o of result) {
+        if (o.kind === "audioinput") {
+          console.log("yinpin shuru", o.label);
+        } else if (o.kind === "audiooutput") {
+          console.log("yinpin shuchu", o.label);
+        }
+      }
+    }
+  })();
+
+</script>
 </html>
