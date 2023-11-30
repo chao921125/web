@@ -5,6 +5,415 @@
     <title>Title</title>
 </head>
 <body>
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript
+<code>
+    数据类型（8种）
+    Undefined、Null、Boolean、String、Number、Symbol(ES6)、BigInt(ES6)	Object（包括数组、函数、对象等）
 
+    Symbol 代表创建后独一无二且不可变的数据类型，它主要是为了解决可能出现的全局变量冲突的问题
+    BigInt 是一种数字类型的数据，它可以表示任意精度格式的整数，使用 BigInt 可以安全地存储和操作大整数，即使这个数已经超出了 Number 能够表示的安全整数范围。
+</code>
+<code>
+    堆内存与栈内存
+    在操作系统中，内存被分为栈区和堆区，栈区内存由编译器自动分配释放，存放函数的参数值，局部变量的值等。其操作方式类似于数据结构中的栈。堆区内存一般由开发着分配释放，若开发者不释放，程序结束时可能由垃圾回收机制回收。
+    在数据结构中，栈中数据的存取方式为先进后出。堆是一个优先队列，是按优先级来进行排序的，优先级可以按照大小来规定。
+
+    数据存储方式
+
+    基本数据类型的数据直接存储在栈（stack）中的简单数据段，占据空间小、大小固定，属于被频繁使用数据，所以放入栈中存储
+    引用数据类型存储在堆（heap）中的对象，占据空间大、大小不固定。如果存储在栈中，将会影响程序运行的性能；引用数据类型在栈中存储了指针，该指针指向堆中该实体的起始地址。当解释器寻找引用值时，会首先检索其在栈中的地址，取得地址后从堆中获得实体。
+</code>
+<code>
+    数据类型检测
+
+    优缺点	typeof	instanceof	constructor	Object.prototype.toString.call
+    优点	使用简单	能检测出引用类型数据	基本能检测所有的类型（除了null和undefined）	检测出所有的类型
+    缺点	只能检测出除null外的基本数据类型和引用数据类型中的function	不能检测出基本类型，且不能跨iframe	constructor易被修改，也不能跨iframe	IE6下，undefined和null均为Object
+</code>
+<code>
+    判断数组的方式
+    Object.prototype.toString.call([1, 2, 3]) // [object Array]
+    通过ES6的Array.isArray([1, 2, 3])做判断 // true or false
+    [1, 2, 3] instanceof Array // true or false
+    Array.prototype.isPrototypeOf([1, 2, 3]) // true or false
+    通过原型链去判断：[1, 2, 3].__proto__ === Array.prototype
+</code>
+<code>
+    Undefined与Null
+
+    Undefined 和 Null 都是基本数据类型，这两个基本数据类型分别都只有一个值，就是 undefined 和 null
+    undefined 代表的含义是未定义，null 代表的含义是空对象。一般变量声明了但还没有定义的时候会返回 undefined，null主要用于赋值给一些可能会返回对象的变量，作为初始化
+    undefined 在 JavaScript 中不是一个保留字，这意味着可以使用 undefined 来作为一个变量名，但是这样的做法是非常危险的，它会影响对 undefined 值的判断。我们可以通过一些方法获得安全的 undefined 值，比如说 void 0
+    typeof null 的返回值为object，且undefined == null返回true
+</code>
+<code>
+    this的指向问题
+
+    this是一个在运行时才进行绑定的引用，在不同的情况下它可能会被绑定不同的对象
+    this 永远指向最后调用它的那个对象
+
+    函数调用模式：当一个函数不是一个对象的属性，直接作为函数来调用时，this指向全局对象
+    方法调用模式：当一个函数作为一个对象的方法来调用时，this指向这个对象
+    构造器调用模式：如果一个函数使用new调用时，函数在执行前会创建一个新的对象，this就指向这个新的对象
+    如何改变this的指向？
+    使用ES6箭头函数，箭头函数不绑定this，箭头函数的this使用指向函数定义时的this
+    在函数内部定义一个变量_this保存this
+    使用 apply、call、bind
+    new 实例化一个对象
+    this绑定的优先级：new绑定优先级 > 显示绑定优先级 > 隐式绑定优先级 > 默认绑定优先级
+</code>
+<code>
+    apply、bind和call
+
+    apply、bind和call都可以改变this的指向
+    apply(thisArg[, argsArray])
+    apply() 方法调用一个具有给定 this 值的函数，以及以一个数组（或一个类数组对象）的形式提供的参数
+    thisArg: 在函数运行时使用的 this 值。请注意，this 可能不是该方法看到的实际值：如果这个函数处于非严格模式下，则指定为 null 或 undefined 时会自动替换为指向全局对象，原始值会被包装
+
+    argsArray: 可选。一个数组或者类数组对象，其中的数组元素将作为单独的参数传给 函数。如果该参数的值为 null 或 undefined，则表示不需要传入任何参数
+
+    返回值：调用有指定 this 值和参数的函数的结果
+
+    const numbers = [1, 3, 2, 5, 7, 4]
+    const max = Math.max.apply(null, numbers)   // 7
+    const min = Math.max.apply(null, numbers)   // 1
+    call(thisArg[, arg1[, arg2[, ...]]])
+    call() 方法使用一个指定的 this 值和单独给出的一个或多个参数来调用一个函数
+    该方法的语法和作用与 apply() 方法类似，只有一个区别，就是 call() 方法接受的是一个参数列表，而 apply() 方法接受的是一个包含多个参数的数组
+    thisArg: 在函数运行时使用的 this 值。请注意，this 可能不是该方法看到的实际值：如果这个函数处于非严格模式下，则指定为 null 或 undefined 时会自动替换为指向全局对象，原始值会被包装
+
+    arg1, arg2, ...: 指定的参数列表
+
+    返回值：调用有指定 this 值和参数的函数的结果
+
+    bind(thisArg[, arg1[, arg2[, ...]]])
+    bind() 方法创建一个新的函数，在 bind() 被调用时，这个新函数的 this 被指定为 bind() 的第一个参数，而其余参数将作为新函数的参数，供调用时使用（bind 是创建一个新的函数，我们必须要手动去调用）
+    thisArg: 调用绑定函数时作为 this 参数传递给目标函数的值。如果使用new运算符构造绑定函数，则忽略该值。当使用 bind 在 setTimeout 中创建一个函数（作为回调提供）时，作为 thisArg 传递的任何原始值都将转换为 object。如果 bind 函数的参数列表为空，或者thisArg是null或undefined，执行作用域的 this 将被视为新函数的 thisArg
+
+    arg1, arg2, ...: 指定的参数列表
+
+    返回值：返回一个原函数的拷贝，并拥有指定的 this 值和初始参数
+</code>
+<code>
+    伪数组（类数组）
+
+    一个拥有length属性和若干索引属性的对象可以被成为类数组对象，类数组对象和数组类似，但不能调用数组的方法
+    常见的类数组对象：arguments和DOM方法的返回结果，还有一个函数也可以被看作是类数组对象，因为它含有 length 属性值，代表可接收的参数个数
+
+    类数组如何转换为数组
+
+    通过call方法调用数组的slice方法
+    Array.prototype.slice.call(arrayLike);
+    通过call方法调用数组的splice方法
+    Array.prototype.splice.call(arrayLike, 0);
+    通过apply调用数组的concat方法
+    Array.prototype.concat.apply([], arrayLike);
+    通过Array.from方法
+    Array.from(arrayLike);
+    通过展开运算符
+    const array = [...arrayLike]
+</code>
+<code>
+    如何遍历类数组
+
+    arguments是一个对象，它的属性是从 0 开始依次递增的数字，还有callee和length等属性，与数组相似；但是它却没有数组常见的方法属性，如forEach, reduce等，所以叫它们类数组
+    使用call或apply方法
+    function sum() {
+    Array.prototype.forEach.call(arguements, a => { console.log(a) })
+    }
+
+    function sum() {
+    Array.prototype.forEach.apply(arguements, [a => { console.log(a)] })
+    }
+    使用Array.from方法将类数组转化成数组
+    function sum() {
+    const args = Array.from(arguements)
+    args.forEach(a => { console.log(a) })
+    }
+    使用展开运算符将类数组转成数组
+    function sum() {
+    const args = [...arguements]
+    args.forEach(a => { console.log(a) })
+    }
+</code>
+<code>
+    for...in与for...of
+
+    区别	for...in	for...of
+    遍历对象	对象的键名，会遍历整个原型链，性能差	对象的键值，只遍历当前对象
+    遍历数组	返回数组中所有可枚举属性，包括原型链上的属性	只返回对应数组的下标对应的属性值
+
+    for...in循环主要是为了遍历对象，不适用于遍历数组，for...of 循环可以用来遍历数组、类数组对象，字符串、Set、Map 以及 Generator 对象
+</code>
+<code>
+    ajax
+
+    AJAX Ajax 即“AsynchronousJavascriptAndXML”（异步 JavaScript 和 XML），是指一种创建交互式网页应用的网页开发技术。它是一种在无需重新加载整个网页的情况下，能够更新部分网页的技术。通过在后台与服务器进行少量数据交换，Ajax 可以使网页实现异步更新。这意味着可以在不重新加载整个网页的情况下，对网页的某部分进行更新。传统的网页（不使用 Ajax）如果需要更新内容，必须重载整个网页页面。其缺点如下：
+    本身是针对MVC编程，不符合前端MVVM的浪潮
+    基于原生XHR开发，XHR本身的架构不清晰
+    不符合关注分离（Separation of Concerns）的原则
+    配置和调用方式非常混乱，而且基于事件的异步模型不友好
+</code>
+<code>
+    fetch
+
+    Fetch fetch号称是AJAX的替代品，是在ES6出现的，使用了ES6中的promise对象。Fetch是基于promise设计的。Fetch的代码结构比起ajax简单多。fetch不是ajax的进一步封装，而是原生js，没有使用XMLHttpRequest对象
+    优点	缺点
+    语法简洁，更加语义化	fetch只对网络请求报错，对400，500都当做成功的请求，服务器返回 400，500 错误码时并不会 reject，只有网络错误这些导致请求不能完成时，fetch 才会被 reject。
+    基于标准 Promise 实现，支持 async/await	fetch默认不会带cookie，需要添加配置项： fetch(url, {credentials: 'include'})
+    更加底层，提供的API丰富（request, response）	fetch不支持abort，不支持超时控制，使用setTimeout及Promise.reject的实现的超时控制并不能阻止请求过程继续在后台运行，造成了流量的浪费
+    脱离了XHR，是ES规范里新的实现方式	fetch没有办法原生监测请求的进度，而XHR可以
+</code>
+<code>
+    axios（这是一个类库并非原生js）
+
+    Axios 是一种基于Promise封装的HTTP客户端
+    浏览器端发起XMLHttpRequests请求
+    node端发起http请求
+    支持Promise API
+    监听请求和返回
+    对请求和返回进行转化
+    取消请求
+    自动转换json数据
+    客户端支持抵御XSRF攻击
+</code>
+<code>
+    数组的遍历方法
+
+    方法	改变原数组	特点
+    forEach	否	无返回值
+    map	否	返回新数组，可链式调用
+    filter	否	过滤数组，返回包含符合条件的元素的数组，可链式调用
+    for...of	否	for...of遍历具有Iterator迭代器的对象的属性，返回的是数组的元素、对象的属性值，不能遍历普通的obj对象，将异步循环变成同步循环
+    every	否	遍历的数组里的元素全部符合条件时，返回true
+    some	否	遍历的数组里的元素至少有一个符合条件时，返回true
+    find	否	返回第一个符合条件的值
+    findIndex	否	返回第一个返回条件的值的索引值
+    reduce	否	对数组正序操作
+    reduceRight	否	对数组逆序操作
+</code>
+<code>
+    深拷贝
+
+    深拷贝是将一个对象从内存中完整的拷贝一份出来，从堆内存中开辟一个新的区域存放新对象（新旧对象不共享同一块内存），且修改新对象不会影响原来的对象（深拷贝采用了在堆内存中申请新的空间来存储数据，这样每个可以避免指针悬挂）
+    实现方式如下：
+
+    JSON.parse(JSON.stringify())
+    这也是利用JSON.stringify将对象转成JSON字符串，再用JSON.parse把字符串解析成对象，一去一来，新的对象产生了，而且对象会开辟新的栈，实现深拷贝。这种方法虽然可以实现数组或对象深拷贝,但不能处理函数和正则，因为这两者基于JSON.stringify和JSON.parse处理后，得到的正则就不再是正则（变为空对象），得到的函数就不再是函数（变为null）了
+    lodash的_.cloneDeep
+    需要安装lodash
+    jQuery.extend()
+    手写递归循环
+    递归方法实现深度克隆原理：遍历对象、数组直到里边都是基本数据类型，然后再去复制，就是深度拷贝
+    function deepClone(obj, hash = new WeakMap()) {
+    if (obj === null) return obj // 如果是null或者undefined我就不进行拷贝操作
+    if (obj instanceof Date) return new Date(obj)
+    if (obj instanceof RegExp) return new RegExp(obj)
+    // 可能是对象或者普通的值  如果是函数的话是不需要深拷贝
+    if (typeof obj !== "object") return obj
+    // 是对象的话就要进行深拷贝
+    if (hash.get(obj)) return hash.get(obj)
+    let cloneObj = new obj.constructor()
+    // 找到的是所属类原型上的constructor,而原型上的 constructor指向的是当前类本身
+    hash.set(obj, cloneObj)
+    for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+    // 实现一个递归拷贝
+    cloneObj[key] = deepClone(obj[key], hash)
+    }
+    }
+    return cloneObj
+    }
+</code>
+<code>
+    浅拷贝
+
+    浅拷贝是创建一个新对象，这个对象有着原始对象属性值的一份精确拷贝。如果属性是基本类型，拷贝的就是基本类型的值，如果属性是引用类型，拷贝的就是内存地址 ，所以如果其中一个对象改变了这个地址，就会影响到另一个对象
+    实现方式如下：
+
+    Object.assign()
+    Object.assign() 方法可以把任意多个的源对象自身的可枚举属性拷贝给目标对象，然后返回目标对象
+    let obj1 = { person: {name: "kobe", age: 41},sports:'basketball' }
+    let obj2 = Object.assign({}, obj1);
+    obj2.person.name = "wade";
+    obj2.sports = 'football'
+    console.log(obj1); // { person: { name: 'wade', age: 41 }, sports: 'basketball' }
+    lodash的_.clone
+    需要安装lodash
+    展开运算符
+    展开运算符是一个 es6 / es2015特性，它提供了一种非常方便的方式来执行浅拷贝，这与 Object.assign ()的功能相同
+    let obj1 = { name: 'Kobe', address:{x:100,y:100}}
+    let obj2= {... obj1}
+    obj1.address.x = 200;
+    obj1.name = 'wade'
+    console.log('obj2',obj2) // obj2 { name: 'Kobe', address: { x: 200, y: 100 } }
+    Array.prototype.concat()
+    let arr = [1, 3, {
+    username: 'kobe'
+    }];
+    let arr2 = arr.concat();
+    arr2[2].username = 'wade';
+    console.log(arr); //[ 1, 3, { username: 'wade' } ]
+    Array.prototype.slice()
+    let arr = [1, 3, {
+    username: ' kobe'
+    }];
+    let arr3 = arr.slice();
+    arr3[2].username = 'wade'
+    console.log(arr); // [ 1, 3, { username: 'wade' } ]
+</code>
+<code>
+    赋值与深/浅拷贝的区别
+
+    对于引用数据类型
+    赋值	深拷贝	浅拷贝
+    当我们把一个对象赋值给一个新的变量时，赋的其实是该对象的在栈中的地址，而不是堆中的数据。也就是两个对象指向的是同一个存储空间，无论哪个对象发生改变，其实都是改变的存储空间的内容，因此，两个对象是联动的。	从堆内存中开辟一个新的区域存放新对象，对对象中的子对象进行递归拷贝,拷贝前后的两个对象互不影响。	重新在堆中创建内存，拷贝前后对象的基本数据类型互不影响，但拷贝前后对象的引用类型因共享同一块内存，会相互影响。
+    和原数据是否指向同一对象	第一层数据为基本数据类型且修改基本类型数据时	原数据中包含子对象且修改子对象时
+    赋值	是	改变会使原数据一起改变	改变会使原数据一起改变
+    深拷贝	否	改变不会使原数据一起改变	改变不会使原数据一起改变
+    浅拷贝	否	改变不会使原数据一起改变	改变会使原数据一起改变
+</code>
+<code>
+    forEach如何跳出循环
+
+    forEach是不能通过break或者return来实现跳出循环的，forEach的回调函数形成了一个作用域，在里面使用return并不会跳出，只会被当做continue
+    实现方法：try...catch
+
+    function getItemById(arr, id) {
+    var item = null;
+    try {
+    arr.forEach(function (curItem, i) {
+    if (curItem.id == id) {
+    item = curItem;
+    throw Error();
+    }
+    })
+    } catch (e) {}
+    return item;
+    }
+</code>
+<code>
+    闭包
+
+    闭包是指有权访问另一个函数作用域中的变量的函数
+    闭包是一种特殊的对象。它由两部分构成：函数，以及创建该函数的环境。环境由闭包创建时在作用域中的任何局部变量组成
+    用途
+    使我们在函数外部能够访问到函数内部的变量。通过使用闭包，可以通过在外部调用闭包函数，从而在外部访问到函数内部的变量，可以使用这种方法来创建私有变量
+    使已经运行结束的函数上下文中的变量对象继续留在内存中，因为闭包函数保留了这个变量对象的引用，所以这个变量对象不会被回收
+    使用场景
+    return 回一个函数
+    函数作为参数
+    自动执行函数
+    循环赋值
+    回调函数
+    节流防抖
+    函数柯里化
+    执行过程
+    形成私有上下文
+    进栈执行
+    开始一系列操作
+    初始化作用域链（两头<当前作用域，上级作用域>）
+    初始化this
+    初始化arguments
+    赋值形参
+    变量提升
+    代码执行
+    正常情况下，代码执行完成之后，私有上下文出栈被回收。但是遇到特殊情况，如果当前私有上下文执行完成之后中的某个东西被执行上下文以外的东西占用，则当前私有上下文就不会出栈释放，也就是形成了不被销毁的上下文，闭包
+    注意事项
+    容易导致内存泄漏。闭包会携带包含其它的函数作用域，因此会比其他函数占用更多的内存。过度使用闭包会导致内存占用过多，所以要谨慎使用闭包。
+</code>
+<code>
+    执行上下文
+
+    执行上下文是评估和执行 JavaScript 代码的环境的抽象概念。每当 Javascript 代码在运行的时候，它都是在执行上下文中运行
+    执行上下文有三种类型
+
+    全局执行上下文：任何不在函数内部的都是全局执行上下文，它首先会创建一个全局的window对象，并且设置this的值等于这个全局对象，一个程序中只有一个全局执行上下文
+    函数执行上下文： 每当一个函数被调用时, 都会为该函数创建一个新的上下文。每个函数都有它自己的执行上下文，不过是在函数被调用时创建的。函数上下文可以有任意多个。每当一个新的执行上下文被创建，它会按定义的顺序（将在后文讨论）执行一系列步骤
+    eval函数执行上下文：执行在 eval 函数内部的代码也会有它属于自己的执行上下文，关于eval强烈不推荐使用！
+
+    执行上下文栈
+    JavaScript引擎使用执行上下文栈来管理执行上下文
+    当JavaScript执行代码时，首先遇到全局代码，会创建一个全局执行上下文并且压入执行栈中，每当遇到一个函数调用，就会为该函数创建一个新的执行上下文并压入栈顶，引擎会执行位于执行上下文栈顶的函数，当函数执行完成之后，执行上下文从栈中弹出，继续执行下一个上下文。当所有的代码都执行完毕之后，从栈中弹出全局执行上下文
+    let a = 'Hello World!';
+
+    function first() {
+    console.log('Inside first function');
+    second();
+    console.log('Again inside first function');
+    }
+
+    function second() {
+    console.log('Inside second function');
+    }
+
+    first();
+    console.log('Inside Global Execution Context');
+
+
+    执行上下文的三个阶段
+
+    创建阶段 → 执行阶段 → 回收阶段
+    创建阶段
+    this绑定
+    在全局执行上下文中，this指向全局对象（window对象）
+    在函数执行上下文中，this指向取决于函数如何调用。如果它被一个引用对象调用，那么 this 会被设置成那个对象，否则 this 的值被设置为全局对象或者 undefined
+    创建词法环境组件
+    词法环境是一种有标识符——变量映射的数据结构，标识符是指变量/函数名，变量是对实际对象或原始数据的引用
+    词法环境的内部有两个组件：环境记录器:用来储存变量个函数声明的实际位置，外部环境的引用：可以访问父级作用域
+    创建变量环境组件
+    变量环境也是一个词法环境，其环境记录器持有变量声明语句在执行上下文中创建的绑定关系
+    执行阶段
+    在这阶段，执行变量赋值、代码执行。如果 Javascript 引擎在源代码中声明的实际位置找不到变量的值，那么将为其分配 undefined 值
+
+    回收阶段
+    执行上下文出栈等待虚拟机回收执行上下文
+</code>
+<code>
+    作用域Scope
+
+    作用域是在运行时代码中的某些特定部分中变量、函数和对象的可访问性。换句话说，作用域决定了代码区块中变量和其他资源的可见性。作用域就是一个独立的地盘，让变量不会外泄、暴露出去。也就是说作用域最大的用处就是隔离变量，不同作用域下同名变量不会有冲突。
+    全局作用域
+    直接写在script标签的JS代码，都在全局作用域。在全局作用域下声明的变量叫做全局变量（在块级外部定义的变量）
+    所有末定义直接赋值的变量自动声明为拥有全局作用域
+    全局变量在全局的任何位置下都可以使用；全局作用域中无法访问到局部作用域的中的变量
+    全局作用域在页面打开的时候创建，在页面关闭时销毁
+    所有 window 对象的属性拥有全局作用域
+    var和function命令声明的全局变量和函数是window对象的属性和方法
+    let命令、const命令、class命令声明的全局变量，不属于window对象的属性
+    值得注意的是，块语句（大括号之间的语句，如if语句、switch语句、for循环语句、while语句）不会创建一个新的作用域，在块语句中定义的变量将保留在它们存在的作用域中
+
+    函数作用域（局部作用域）
+    调用函数时会创建函数作用域，函数执行完毕之后，作用域销毁。每调用一次函数就会创建一个新的函数作用域，他们之间是相互独立的
+    在函数作用域中可以访问全局变量，在全局作用域中一般情况下无法访问函数内的变量（可以通过闭包访问）
+    在函数作用域中操作一个变量时，它会先在自身作用域内寻找，如果有就直接使用，如果没有就向上一级作用域中寻找，知道找到全局作用域中。如果全局作用域中仍未找到，则报错
+    块级作用域
+    块级作用域可通过新增命令let和const声明，所声明的变量在指定的块级作用域外无法被访问，块级作用域在如下情况被创建：
+
+    在一个函数内部
+    在一个代码块（由一对花括号包裹）内部
+    let 声明的语法与 var 的语法一致。基本上可以用 let 来代替 var 进行变量声明，但会将变量的作用域限制在当前代码块中。块级作用域有以下几个特点：
+
+    声明变量不会提升到代码块顶部
+    禁止重复声明
+
+    作用域链
+    在某个作用域内访问一个变量时，会先在当前作用域内寻找，如果没有找到，则去上一级作用域内寻找，以此类推。这样的变量作用域访问的链式结构，被称为作用域链
+    作用域链的作用是保证对执行环境有权访问的所有变量和函数的有序访问，通过作用域链，可以访问到外层环境的变量和函数。
+</code>
+<code>
+    预解析（变量提升）
+
+    JS 引擎在执行一段代码的时候，会按照下面的步骤进行工作
+
+    把变量的声明提升到当前作用域的最前面，只会提升声明，不会提升赋值
+    把函数的声明提升到当前作用域的最前面，只会提升声明，不会提升调用
+    先提升function，再提升var声明的变量
+    区别
+    JavaScript 代码执行前引擎会先进行预编译，预编译期间会将变量声明与函数声明提升至其对应作用域的最顶端，函数内声明的变量只会提升至该函数作用域最顶层。当函数内部定义的一个变量与外部相同时，那么函数体内的这个变量就会被上升到最顶端
+    函数提升只会提升函数声明式写法，函数表达式的写法不存在函数提升
+    函数提升的优先级大于变量提升的优先级，即函数提升在变量提升之上
+
+</code>
 </body>
 </html>

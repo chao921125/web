@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>$Title$</title>
+</head>
+<body>
+
+</body>
+<script>
+  (async () => {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+      console.log("不支持 enumerateDevices() .");
+    } else {
+      const result = await navigator.mediaDevices.enumerateDevices();
+      for (let o of result) {
+        if (o.kind === "audioinput") {
+          console.log("yinpin shuru", o.label);
+        } else if (o.kind === "audiooutput") {
+          console.log("yinpin shuchu", o.label);
+        }
+      }
+    }
+
+  })();
+</script>
+</html>
