@@ -22,22 +22,6 @@
       }
     }
 
-    function Date(n) {
-      return [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday",
-      ][n % 7 || 0];
-    }
-    function runCodeWithDateFunction(obj) {
-      return Function('"use strict";return (' + obj + ")")()(Date);
-    }
-    console.log(runCodeWithDateFunction("function(Date){ return Date(2) }"));
-    console.log(Date(1));
   })();
 </script>
 </html>
