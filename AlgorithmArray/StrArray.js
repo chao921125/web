@@ -1,7 +1,7 @@
 let div = document.createElement("div");
 div.style.color = "#000";
 div.style.backgroundColor = "#fff";
-div.innerHTML += "[1,2,3,4,1,3] 4" + "<br/>";
+div.innerHTML += "[\"eat\", \"tea\", \"tan\", \"ate\", \"nat\", \"bat\"] 4" + "<br/>";
 
 function StrArr(array) {
   let hm = new Map();
