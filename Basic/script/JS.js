@@ -17,3 +17,18 @@ const promise = Promise.all([p1, p2, p3]).then(res => {
 }, error => {
   console.log("error", error)    // 当number为25时，p3会返回rejected，promise状态会变成rejected，error值为p3 failed!
 })
+
+function debounce(fn,wait){
+  let timer = null;
+  return function(){
+    if(timer !== null){
+      clearTimeout(timer);
+    }
+    timer = setTimeout(fn,wait);
+  }
+}
+
+function test() {
+  console.log("test");
+}
+document.querySelector("#test").addEventListener("click", debounce(test, 1000));
