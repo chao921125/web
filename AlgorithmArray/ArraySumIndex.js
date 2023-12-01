@@ -23,7 +23,6 @@ function sumIndex(array, target) {
     hm.set(l, i);
   }
 }
-console.log();
 
 div.innerHTML += "Up: " + sumIndex([1,2,3,4,1,3], 4) + "<br/>";
 document.body.appendChild(div);
