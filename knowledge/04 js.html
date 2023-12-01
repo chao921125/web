@@ -484,5 +484,183 @@ https://developer.mozilla.org/zh-CN/docs/Web/JavaScript
     }
     }
 </code>
+<code>
+    箭头函数（ES6常用函数）
+    ES6中允许使用“箭头”（=>） 来定义函数。箭头函数相当于匿名函数，并且简化了函数定义
+    特点
+
+    箭头函数不绑定this，箭头函数里的this永远指向定义箭头函数时所处的作用域
+    箭头函数的this永远不会变，call、apply、bind也无法改变
+    箭头函数只能声明成匿名函数，但可以通过表达式的方式让箭头函数具名
+    箭头函数没有原型prototype
+    因为this的指向问题，箭头函数不能作为构造函数使用
+    箭头函数没有 arguments 在箭头函数内部访问这个变量访问的是外部环境的arguments， 可以使用 ...代替
+</code>
+<code>
+    Promise（重中之重，ES6中新增非常实用的一个特性）
+
+    ES6新增的一种异步编程的解决方案，比传统的回调函数和事件更加的合理和强大。通过Promise可以将异步操作以同步操作的流程表达出来，避免了层层嵌套的回调函数。Promise可以解决异步的问题，但不能说Promise是异步的
+    特点
+    对象的状态不受外界影响。Promise对象代表一个异步操作，有三种状态：
+    pending——进行中
+    resolved——已成功
+    rejected——已失败
+    一旦状态改变，就不会再发生变化，任何时候都可以得到这个结果。Promise对象状态的改变只有两种可能：
+    pending——resolved
+    pending——rejected
+    Promise内部发生错误，不会影响到外部程序的执行。
+    Promise一旦执行则无法取消：
+    一旦创建就会立即执行，无法中途取消（缺点1）
+    如果不设置回调函数，Promise内部抛出的错误将不会反应到外部（缺点2）
+    当处于pending状态时，无法得知目前进展到哪一阶段，即无法预测是刚刚开始还是即将完成（缺点3）
+    用法
+    创建Promise实例时，必须传入一个函数作为参数：
+
+    new Promise(() => {})
+    该函数可以接收另外两个由JavaScript引擎提供的函数，resolve和reject:
+
+    resolve——将Promise对象的状态从pending变为resolved，将异步操作的结果作为参数传递出去
+    reject——将Promise对象的状态从pending变为rejected，将异步操作报出的错误作为参数传递出去
+    const promise = new Promise((resolve, reject) => {
+    if (true) resolve('value')
+    else reject('error')
+    })
+    Promise实例生成以后，可以用then方法分别指定resolved状态和rejected状态的回调函数：
+
+    promise.then(value => {
+    console.log(value)  // 'value'
+    }, error => {
+    console.log(error)  // 'error'
+    })
+    当then方法只有一个函数参数时，此时为resolved状态的回调方法：
+
+    promise.then(value => {
+    // 只有状态为resolved时才能调用，如果返回的是rejected状态，则报错 Uncaught (in promise) error
+    console.log(value)
+    })
+    只有当promise的状态变为resolved或者rejected时，then方法才会被调用
+    Promise新建后就会立即执行，并且调用resolve或reject后不会终结 Promise的参数函数的执行。
+
+    let promise = new Promise(resolve => {
+    console.log('1')
+    resolve()
+    console.log('2')
+    })
+    promise.then(resolved => {
+    console.log('3')
+    })
+    console.log('3')
+    resolve返回的是另外一个Promise实例：
+
+    const p1 = new Promise((_, reject) => {
+    setTimeout(() => reject('error'), 3000);
+    })
+    const p2 = new Promise(resolve => {
+    setTimeout(() => resolve(p1), 1000);
+    })
+    p2.then(
+    result => console.log(result),
+    error => console.log(error) // error
+    )
+    上面代码中，p1是一个 Promise，3 秒之后变为rejected。p2的状态在 1 秒之后改变，resolve方法返回的是p1。由于p2返回的是另一个 Promise，导致p2自己的状态无效了，由p1的状态决定p2的状态。所以，后面的then语句都变成针对后者（p1）。又过了 2 秒，p1变为rejected，导致触发catch方法指定的回调函数。可以理解成p2.then 实际上是p1.then
+    当resolve返回的是另一个Promise实例的时候，当前Promise实例的状态会根据返回的Promise实例的状态来决定
+    常用API
+    Promise.resolve()
+
+    有时需要将现有对象转为 Promise 对象，Promise.resolve()方法就起到这个作用，且实例状态为resolve：
+
+    Promise.resolve('foo')
+    // 等价于
+    return new Promise(resolve => resolve('foo'))
+    Promise.resolve()的参数有以下几种情况：
+
+    参数是一个Promise实例：
+    const promise = new Promise(resolve => {
+    resolve('resolve')
+    })
+    let p = Promise.resolve(promise)
+    // p 相当于
+    let p = new Promise(resolve => {
+    resolve(promise)
+    })
+    console.log(p === promise)  // true
+    参数是一个thenable对象：
+    thenable对象指的是具有then方法的对象，Promise.resolve()会将这个对象转为Promise对象，然后立即执行thenable对象的then方法
+
+    const thenable = {
+    then(resolve, reject) {
+    resolve('resolved')
+    }
+    }
+    const p1 = Promise.resolve(thenable)
+    p1.then(res => {
+    console.log(res)    // 'resolved'
+    })
+    上面代码中，thenable对象的then()方法执行后，对象p1的状态就变为resolved，从而立即执行最后那个then()方法指定的回调函数，输出'resolved'
+    参数不是具有then()方法的对象，或者根本不是对象
+    const promise = Promise.resolve({name: 'James'})
+    promise.then(res => {
+    console.log(res)    // {name: 'James'}
+    })
+    当参数是不含有then()方法的对象，或者根本不是对象时，会直接返回该参数
+    不带有任何参数
+    const promise = Promise.resolve()
+    promise.then(res => {
+    console.log(res)    // undefined
+    })
+    Promise.resolve()方法允许调用时不带参数，直接返回一个resolved状态的 Promise 对象，传参为undefined
+    Promise.reject()
+
+    Promise.reject(reason)方法也会返回一个新的 Promise 实例，该实例的状态为rejected
+
+    const promise = Promise.reject('Error')
+    // 等价于
+    const promise = new Promise((resolve, reject) => {
+    reject('Error')
+    })
+    Promise.all()
+
+    Promise.all()方法用于将多个 Promise 实例，包装成一个新的 Promise 实例
+
+    const p1 = new Promise((resolve, reject) => {})
+    const p1 = new Promise((resolve, reject) => {})
+    const p1 = new Promise((resolve, reject) => {})
+    const promise = Promise.all([p1, p2, p3])
+    promise.then(result => {}, error => {})
+    面代码中，Promise.all()方法接受一个数组作为参数，p1、p2、p3都是 Promise 实例，如果不是，就会调用Promise.resolve方法，将参数转为 Promise 实例，再进一步处理。另外，Promise.all()方法的参数可以不是数组，但必须具有 Iterator 接口，且返回的每个成员都是 Promise 实例。p的状态由p1、p2、p3决定，分成两种情况：
+
+    只有p1、p2、p3的状态都变成fulfilled，p的状态才会变成fulfilled，此时p1、p2、p3的返回值组成一个数组，传递给p的回调函数
+    只要p1、p2、p3之中有一个被rejected，p的状态就变成rejected，此时第一个被reject的实例的返回值，会传递给p的回调函数
+    const number = 35
+
+    const p1 = new Promise((resolve, reject) => {
+    if (number >= 10) resolve('p1 success!')
+    else reject('p1 failed!')
+    })
+    const p2 = new Promise((resolve, reject) => {
+    if (number >= 20) resolve('p2 success!')
+    else reject('p2 failed!')
+    })
+    const p3 = new Promise((resolve, reject) => {
+    if (number >= 30) resolve('p3 success!')
+    else reject('p3 failed!')
+    })
+    const promise = Promise.all([p1, p2, p3]).then(res => {
+    console.log(res)  // 当number为35时，res值为[ 'p1 success!', 'p2 success!', 'p3 success!' ]
+    }, error => {
+    console.log(error)    // 当number为25时，p3会返回rejected，promise状态会变成rejected，error值为p3 failed!
+    })
+    如果作为参数的 Promise 实例，自己定义了catch方法，那么它一旦被rejected，并不会触发Promise.all()的catch方法
+    const p1 = new Promise(resolve => {
+    resolve("hello");
+    }).then(result => result).catch(e => e);
+
+    const p2 = new Promise(() => {
+    throw new Error("报错了");
+    }).then(result => result).catch(e => e); // p2实际上是catch返回的promise实例
+
+    Promise.all([p1, p2]).then(result => console.log(result)).catch(e => console.log(e));
+
+</code>
 </body>
 </html>
