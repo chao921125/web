@@ -413,7 +413,386 @@ https://developer.mozilla.org/zh-CN/docs/Web/JavaScript
     JavaScript 代码执行前引擎会先进行预编译，预编译期间会将变量声明与函数声明提升至其对应作用域的最顶端，函数内声明的变量只会提升至该函数作用域最顶层。当函数内部定义的一个变量与外部相同时，那么函数体内的这个变量就会被上升到最顶端
     函数提升只会提升函数声明式写法，函数表达式的写法不存在函数提升
     函数提升的优先级大于变量提升的优先级，即函数提升在变量提升之上
+</code>
+<code>
+    内存泄露
 
+    内存泄露是指由于疏忽或错误造成程序未能释放已经不再使用的内存
+    内存泄露的原因有以下几种：
+
+    意外的全局变量：由于使用为声明的变量，而意外的创建了一个变量，这个变量将一直留在内存中无法被回收
+    被遗忘的定时器或回调函数：设置了setInterval定时器而忘记销毁，如果循环函数有对外部的引用的话，这个变量将一直被留在内存中无法被回收
+    脱离DOM的引用：获取一个 DOM 元素的引用，而后面这个元素被删除，由于一直保留了对这个元素的引用，所以它也无法被回收
+    闭包：不合理的使用闭包，从而导致某些变量一直被留在内存当中
+</code>
+<code>
+    函数式编程的优缺点
+
+    优点	缺点
+    降低维护成本	过渡包装会导致性能开销
+    代码的复用性更强	资源占用更强
+    组合起来更加优雅	为了实现迭代，可能会掉入递归陷阱
+</code>
+<code>
+    纯函数
+
+    纯函数是对给定的输入返还相同的输出的函数，并且要求所有的数据都是不可变的
+    特性
+
+    函数内部传入指定的值，就会返回唯一确定的值
+    不会造成超出作用域的变化，例如修改全局变量或引用传递的参数
+    优势
+
+    通过纯函数可以产生可测试的代码
+    不依赖外部环境计算，不会产生副作用，复用性高
+    可读性高，不管是不是纯函数，都会有一个语义化的名称，便于阅读
+    符合模块化概念及单一职责原则
+</code>
+<code>
+    高阶函数
+
+    高阶函数是指使用其它函数作为参数、或者返回一个函数作为返回值的函数
+    常见的高阶函数
+
+    Array.prototype.map
+    Array.prototype.filter
+    Array.prototype.forEach
+    Array.prototype.reduce......
+</code>
+<code>
+    函数柯里化
+    柯里化（Currying）又叫函数的部分求值，是把接受多个参数的函数变换成接受一个单一参数（最初函数的第一个参数）的函数，并且返回接受余下的参数且返回结果的新函数的技术
+    优点
+
+    参数复用：需要输入多个参数，最终只需输入一个，其余通过arguments对象获取
+    提前确认：避免重复判断某一条件是否符合，不符合则return
+    延迟运行：避免重复执行程序，等真正需要结果的时候再执行
+    function curry(fn, args) {
+    args = args || []
+    var arity = fn.length
+
+    return function() {
+    var _args = Array.prototype.slice.call(arguments)
+    Array.prototype.unshift.call(_args, ...args)
+    _args = _args.concat(args)
+
+    if (_args.length < arity) {
+    return currying.call(null, fn, _args)
+    }
+
+    return fn.apply(null, _args)
+    }
+    }
+</code>
+<code>
+    箭头函数（ES6常用函数）
+    ES6中允许使用“箭头”（=>） 来定义函数。箭头函数相当于匿名函数，并且简化了函数定义
+    特点
+
+    箭头函数不绑定this，箭头函数里的this永远指向定义箭头函数时所处的作用域
+    箭头函数的this永远不会变，call、apply、bind也无法改变
+    箭头函数只能声明成匿名函数，但可以通过表达式的方式让箭头函数具名
+    箭头函数没有原型prototype
+    因为this的指向问题，箭头函数不能作为构造函数使用
+    箭头函数没有 arguments 在箭头函数内部访问这个变量访问的是外部环境的arguments， 可以使用 ...代替
+</code>
+<code>
+    Promise（重中之重，ES6中新增非常实用的一个特性）
+
+    ES6新增的一种异步编程的解决方案，比传统的回调函数和事件更加的合理和强大。通过Promise可以将异步操作以同步操作的流程表达出来，避免了层层嵌套的回调函数。Promise可以解决异步的问题，但不能说Promise是异步的
+    特点
+    对象的状态不受外界影响。Promise对象代表一个异步操作，有三种状态：
+    pending——进行中
+    resolved——已成功
+    rejected——已失败
+    一旦状态改变，就不会再发生变化，任何时候都可以得到这个结果。Promise对象状态的改变只有两种可能：
+    pending——resolved
+    pending——rejected
+    Promise内部发生错误，不会影响到外部程序的执行。
+    Promise一旦执行则无法取消：
+    一旦创建就会立即执行，无法中途取消（缺点1）
+    如果不设置回调函数，Promise内部抛出的错误将不会反应到外部（缺点2）
+    当处于pending状态时，无法得知目前进展到哪一阶段，即无法预测是刚刚开始还是即将完成（缺点3）
+    用法
+    创建Promise实例时，必须传入一个函数作为参数：
+
+    new Promise(() => {})
+    该函数可以接收另外两个由JavaScript引擎提供的函数，resolve和reject:
+
+    resolve——将Promise对象的状态从pending变为resolved，将异步操作的结果作为参数传递出去
+    reject——将Promise对象的状态从pending变为rejected，将异步操作报出的错误作为参数传递出去
+    const promise = new Promise((resolve, reject) => {
+    if (true) resolve('value')
+    else reject('error')
+    })
+    Promise实例生成以后，可以用then方法分别指定resolved状态和rejected状态的回调函数：
+
+    promise.then(value => {
+    console.log(value)  // 'value'
+    }, error => {
+    console.log(error)  // 'error'
+    })
+    当then方法只有一个函数参数时，此时为resolved状态的回调方法：
+
+    promise.then(value => {
+    // 只有状态为resolved时才能调用，如果返回的是rejected状态，则报错 Uncaught (in promise) error
+    console.log(value)
+    })
+    只有当promise的状态变为resolved或者rejected时，then方法才会被调用
+    Promise新建后就会立即执行，并且调用resolve或reject后不会终结 Promise的参数函数的执行。
+
+    let promise = new Promise(resolve => {
+    console.log('1')
+    resolve()
+    console.log('2')
+    })
+    promise.then(resolved => {
+    console.log('3')
+    })
+    console.log('3')
+    resolve返回的是另外一个Promise实例：
+
+    const p1 = new Promise((_, reject) => {
+    setTimeout(() => reject('error'), 3000);
+    })
+    const p2 = new Promise(resolve => {
+    setTimeout(() => resolve(p1), 1000);
+    })
+    p2.then(
+    result => console.log(result),
+    error => console.log(error) // error
+    )
+    上面代码中，p1是一个 Promise，3 秒之后变为rejected。p2的状态在 1 秒之后改变，resolve方法返回的是p1。由于p2返回的是另一个 Promise，导致p2自己的状态无效了，由p1的状态决定p2的状态。所以，后面的then语句都变成针对后者（p1）。又过了 2 秒，p1变为rejected，导致触发catch方法指定的回调函数。可以理解成p2.then 实际上是p1.then
+    当resolve返回的是另一个Promise实例的时候，当前Promise实例的状态会根据返回的Promise实例的状态来决定
+    常用API
+    Promise.resolve()
+
+    有时需要将现有对象转为 Promise 对象，Promise.resolve()方法就起到这个作用，且实例状态为resolve：
+
+    Promise.resolve('foo')
+    // 等价于
+    return new Promise(resolve => resolve('foo'))
+    Promise.resolve()的参数有以下几种情况：
+
+    参数是一个Promise实例：
+    const promise = new Promise(resolve => {
+    resolve('resolve')
+    })
+    let p = Promise.resolve(promise)
+    // p 相当于
+    let p = new Promise(resolve => {
+    resolve(promise)
+    })
+    console.log(p === promise)  // true
+    参数是一个thenable对象：
+    thenable对象指的是具有then方法的对象，Promise.resolve()会将这个对象转为Promise对象，然后立即执行thenable对象的then方法
+
+    const thenable = {
+    then(resolve, reject) {
+    resolve('resolved')
+    }
+    }
+    const p1 = Promise.resolve(thenable)
+    p1.then(res => {
+    console.log(res)    // 'resolved'
+    })
+    上面代码中，thenable对象的then()方法执行后，对象p1的状态就变为resolved，从而立即执行最后那个then()方法指定的回调函数，输出'resolved'
+    参数不是具有then()方法的对象，或者根本不是对象
+    const promise = Promise.resolve({name: 'James'})
+    promise.then(res => {
+    console.log(res)    // {name: 'James'}
+    })
+    当参数是不含有then()方法的对象，或者根本不是对象时，会直接返回该参数
+    不带有任何参数
+    const promise = Promise.resolve()
+    promise.then(res => {
+    console.log(res)    // undefined
+    })
+    Promise.resolve()方法允许调用时不带参数，直接返回一个resolved状态的 Promise 对象，传参为undefined
+    Promise.reject()
+
+    Promise.reject(reason)方法也会返回一个新的 Promise 实例，该实例的状态为rejected
+
+    const promise = Promise.reject('Error')
+    // 等价于
+    const promise = new Promise((resolve, reject) => {
+    reject('Error')
+    })
+    Promise.all()
+
+    Promise.all()方法用于将多个 Promise 实例，包装成一个新的 Promise 实例
+
+    const p1 = new Promise((resolve, reject) => {})
+    const p1 = new Promise((resolve, reject) => {})
+    const p1 = new Promise((resolve, reject) => {})
+    const promise = Promise.all([p1, p2, p3])
+    promise.then(result => {}, error => {})
+    面代码中，Promise.all()方法接受一个数组作为参数，p1、p2、p3都是 Promise 实例，如果不是，就会调用Promise.resolve方法，将参数转为 Promise 实例，再进一步处理。另外，Promise.all()方法的参数可以不是数组，但必须具有 Iterator 接口，且返回的每个成员都是 Promise 实例。p的状态由p1、p2、p3决定，分成两种情况：
+
+    只有p1、p2、p3的状态都变成fulfilled，p的状态才会变成fulfilled，此时p1、p2、p3的返回值组成一个数组，传递给p的回调函数
+    只要p1、p2、p3之中有一个被rejected，p的状态就变成rejected，此时第一个被reject的实例的返回值，会传递给p的回调函数
+    const number = 35
+
+    const p1 = new Promise((resolve, reject) => {
+    if (number >= 10) resolve('p1 success!')
+    else reject('p1 failed!')
+    })
+    const p2 = new Promise((resolve, reject) => {
+    if (number >= 20) resolve('p2 success!')
+    else reject('p2 failed!')
+    })
+    const p3 = new Promise((resolve, reject) => {
+    if (number >= 30) resolve('p3 success!')
+    else reject('p3 failed!')
+    })
+    const promise = Promise.all([p1, p2, p3]).then(res => {
+    console.log(res)  // 当number为35时，res值为[ 'p1 success!', 'p2 success!', 'p3 success!' ]
+    }, error => {
+    console.log(error)    // 当number为25时，p3会返回rejected，promise状态会变成rejected，error值为p3 failed!
+    })
+    如果作为参数的 Promise 实例，自己定义了catch方法，那么它一旦被rejected，并不会触发Promise.all()的catch方法
+    const p1 = new Promise(resolve => {
+    resolve("hello");
+    }).then(result => result).catch(e => e);
+
+    const p2 = new Promise(() => {
+    throw new Error("报错了");
+    }).then(result => result).catch(e => e); // p2实际上是catch返回的promise实例
+
+    Promise.all([p1, p2]).then(result => console.log(result)).catch(e => console.log(e));
+
+</code>
+<code>
+    EventLoop（理解什么是宏任务，什么是微任务）
+
+    为了解决单任务执行过长的问题，和处理高优先级的任务，所以需要将任务划分
+    为了解决单个任务执行时间过长，把js任务分为同步任务和异步任务，同步任务直接执行，异步任务放入任务队列等待执行
+    为了解决异步队列中等待任务的执行优先级的问题，把异步任务分为微任务和宏任务，同步任务执行完后，就先执行微任务
+
+    同步和异步
+    我们知道了浏览器页面是由任务队列和事件循环系统来驱动的，但是队列要一个一个执行，如果某个任务(http请求)是个耗时任务，那浏览器总不能一直卡着，所以为了防止主线程阻塞，就将任务分为同步任务和异步任务
+    同步任务：就是任务一个一个执行，如果某个任务执行时间过长，后面的任务只能一直等下去
+    异步任务：就是进程在执行某个任务时，该任务需要等一段时间才能返回，这时候就把这个任务放到专门处理异步任务的任务队列中去，执行栈则继续往下执行，不会因为这个任务而阻塞
+    微任务和宏任务
+    JS执行时，V8会创建一个全局执行上下文，在创建上下文的同时，V8也会在内部创建一个微任务队列
+    有微任务队列，自然就有宏任务队列，宏任务队列中的每一个任务则都称为宏任务，在当前宏任务执行过程中，如果有新的微任务产生，就添加到微任务队列中
+
+    微任务包括：promise.then()、queueMicrotask()、MutationObserver(监听DOM)、node 中的 process.nextTick等
+    宏任务包括：渲染事件、请求、script、setTimeout、setInterval、Node中的setImmediate、I/O 等
+
+    事件循环
+    任务进栈到出栈的循环。即一个宏任务，所有微任务，渲染；一个宏任务，所有微任务，渲染.....
+    循环过程
+
+    所有同步任务都在主线程上依次进行，形成一个执行栈，异步任务进入到一个任务队列中
+    当执行栈中任务执行完后，再去检查微任务队列中的微任务是否完成，有就继续执行，如果微任务过程中又产生新的微任务，就添加到微任务队列末尾继续执行，直到所有微任务全部执行完毕
+    微任务执行完后，再到任务队列检查是否有宏任务，有就取出最先进入队列的宏任务压入执行栈中执行其同步代码
+    然后回到第2步执行该宏任务中的微任务，如此反复，直到宏任务也执行完，如此循环
+</code>
+<code>
+    async/await
+
+    async声明function是一个异步函数，返回一个promise对象，可以使用 then 方法添加回调函数。
+    async函数内部return语句返回的值，会成为then方法回调函数的参数。
+    如果async函数没有返回值 async函数返回一个undefined的promise对象
+
+    await 操作符只能在异步函数 async function 内部使用
+    如果一个 Promise 被传递给一个 await 操作符，await 将等待 Promise 正常处理完成并返回其处理结果，也就是说它会阻塞后面的代码，等待 Promise 对象结果；如果等待的不是 Promise 对象，则返回该值本身
+
+    async/await的优势在于处理由多个Promise组成的 then 链，在之前的Promise文章中提过用then处理回调地狱的问题，async/await相当于对promise的进一步优化。 假设一个业务，分多个步骤，且每个步骤都是异步的，而且依赖上个步骤的执行结果
+    解决回调地狱问题，及含多个继发问题（及C依赖B依赖A），可以用此来解决
+</code>
+<code>
+    防抖
+
+    当事件触发时，相应的函数不会立即触发，而是等待一段时间；
+    当事件连续触发时，函数的触发等待时间会被不断重置（推迟）。
+    通俗的讲，防抖就是，每次触发事件时，在一段时间后才真正响应这个事件，具体应用如下：
+
+    输入框中频繁输入内容，如果输入框改变一次就发送一次请求的话，会对服务器造成很大的压力，所以我们希望在连续输入的时候不发送请求，直到用户输入完或者一段时间没有继续输入的话才发送请求；
+    频繁点击按钮触发事件（恶意的行为）
+    用户缩放浏览器时频繁触发resize事件
+    如何实现防抖函数
+    function debounce(callback, time) {
+    let timer
+    return function() {
+    clearTimeout(timer)
+    let args = arguments
+    timer = setTimeout(() => {
+    callback.apply(this, args)
+    }, time)
+    }
+    }
+
+    module下事件触发
+    function debounce(fn,wait){
+    let timer = null;
+    return function(){
+    if(timer !== null){
+    clearTimeout(timer);
+    }
+    timer = setTimeout(fn,wait);
+    }
+    }
+
+    function test() {
+    console.log("test");
+    }
+    document.querySelector("#test").addEventListener("click", debounce(test, 1000));
+</code>
+<code>
+    节流
+    如果事件被频繁出发，那么节流函数会按照一定的频率来执行函数；
+    不管中间触发了多少次，执行函数的频率总是固定的。
+    说白了节流就是在间隔一段时间执行一次，具体应用如下：
+
+    冷却中的无法再次释放；
+    监听滚动事件，比如是否滑到底部自动加载更多，用throttle来判断；
+    射击游戏的 mousedown/keydown 事件（单位时间只能发射一颗子弹）。
+    如何实现节流函数
+    function throttle(func, delay) {
+    let timer;
+    return function() {
+    let args = arguments;
+    if (!timer) {
+    timer = setTimeout(() => {
+    timer = null;
+    func.apply(this, args)
+    }, delay)
+    }
+    }
+    }
+</code>
+<code>
+    forEach、map和for循环
+
+    forEach
+    没有返回值；
+    无法中断执行；
+    可以使用return跳过当前循环；
+    跳过数组的空位，但不会跳过null和undefined；
+    改变数组情况;
+    如果item是基础数据类型，那么并不会改变数组里面的值，如果是引用类型，那么item和数组里面的值是指向同一内存地址，则都会被改变。
+    Array.prototype.new_forEach = function(callback) { for (let i = 0; i < this.length; i++) { callback(this[i], i, this) } }
+
+    map
+    有返回值；
+    无法中断执行，同forEach；
+    可以使用return跳过当前循环，同forEach；
+    跳过数组的空位，但不会跳过null和undefined，同forEach；
+    改变数组情况，同forEach;
+    手写map方法；
+    Array.prototype.new_map = function(callback) { const res = [] for (let i = 0; i < this.length; i++) { res.push(callback(this[i], i, this)) } return res }
+
+    for循环
+    for循环是个语句，forEach和map则是表达式；
+    for循环可以使用break结束循环；
+    for循环可以使用continue语句跳过当前循环；
+    for循环不会跳过数组的空位，会默认空位为undefined；
+
+    for 循环当然是最简单的，因为它没有任何额外的函数调用栈和上下文；
+    forEach 其次，因为它其实比我们想象得要复杂一些，它的函数签名实际上是array.forEach(function(currentValue, index, arr), thisValue)它不是普通的 for 循环的语法糖，还有诸多参数和上下文需要在执行的时候考虑进来，这里可能拖慢性能；
+    map 最慢，因为它的返回值是一个等长的全新的数组，数组创建和赋值产生的性能开销很大。
 </code>
 </body>
 </html>

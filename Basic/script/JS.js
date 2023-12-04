@@ -1,38 +1,34 @@
-import Demo from "./Demo.js";
+const number = 25
 
-let elDiv = document.createElement("div");
-elDiv.style.width = "100%";
-elDiv.style.height = "100%";
-elDiv.style.color = "#000";
-elDiv.style.backgroundColor = "#00ff00";
+const p1 = new Promise((resolve, reject) => {
+  if (number >= 10) resolve('p1 success!')
+  else reject('p1 failed!')
+})
+const p2 = new Promise((resolve, reject) => {
+  if (number >= 20) resolve('p2 success!')
+  else reject('p2 failed!')
+})
+const p3 = new Promise((resolve, reject) => {
+  if (number >= 30) resolve('p3 success!')
+  else reject('p3 failed!')
+})
+const promise = Promise.all([p1, p2, p3]).then(res => {
+  console.log("res", res)  // 当number为35时，res值为[ 'p1 success!', 'p2 success!', 'p3 success!' ]
+}, error => {
+  console.log("error", error)    // 当number为25时，p3会返回rejected，promise状态会变成rejected，error值为p3 failed!
+})
 
-// Class
-const demo = new Demo(1, 2);
-console.log(demo);
-
-// C
-function sum(x, y, n) {
-  const toNum = Math.pow(10, n);
-  return (x*toNum + y*toNum)/toNum;
+function debounce(fn,wait){
+  let timer = null;
+  return function(){
+    if(timer !== null){
+      clearTimeout(timer);
+    }
+    timer = setTimeout(fn,wait);
+  }
 }
-elDiv.innerText = sum(0.2, 0.1, 1) + "---" + (0.1+0.2);
 
-
-function Date(n) {
-  return [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ][n % 7 || 0];
+function test() {
+  console.log("test");
 }
-function runCodeWithDateFunction(obj) {
-  return Function('"use strict";return (' + obj + ")")()(Date);
-}
-console.log(runCodeWithDateFunction("function(Date){ return Date(2) }"));
-console.log(Date(1));
-
-document.body.append(elDiv);
+document.querySelector("#test").addEventListener("click", debounce(test, 1000));
