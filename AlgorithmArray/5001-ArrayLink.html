@@ -24,7 +24,7 @@
 </body>
 <script>
   ;((e) => {
-    document.title = "数组求正差值";
+    document.title = "两数相加";
 
     // 利用反转，非链表
     const addTwoNumbersBasic = (l1, l2) => {
@@ -64,11 +64,11 @@
       return dummyHead.next;
     }
 
-    const l1 = [2,4,3];
-    const l2 = [5,6,4];
-    // document.querySelector("#primary").innerText = "原数组为：" + l1 + "-" + l2;
+    const testData1 = [2,4,3];
+    const testData2 = [5,6,4];
+    document.querySelector("#primary").innerText = "测试数据：" + testData1 + "-" + testData2;
     const startTime = performance.now();
-    document.querySelector("#exercises").innerText = "基础算法结果索引：" + addTwoNumbers(l1, l2);
+    document.querySelector("#exercises").innerText = "算法结果：" + addTwoNumbers(testData1, testData2);
     const endTime = performance.now();
     document.querySelector("#time").innerText = "耗时：" + (endTime - startTime) + "ms";
   })(window);
