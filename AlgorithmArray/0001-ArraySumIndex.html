@@ -28,16 +28,21 @@
 <script>
   ;((e) => {
     document.title = "两数之和求索引";
+
+    // 基础解法
     const twoSumBasic = (nums, target) => {
+      if (!nums.length) return;
       for (let i = 0; i < nums.length; i++) {
-        for (let j = 0; j < nums.length; j++) {
+        for (let j = i+1; j < nums.length; j++) {
           if (nums[i] + nums[j] === target) {
             return [i, j];
           }
         }
       }
     }
+    // 最优解
     const twoSumMap = (nums, target) => {
+      if (!nums.length) return;
       let hm = new Map();
       for (let i = 0; i < nums.length; i++) {
         let l = nums[i];
@@ -47,6 +52,7 @@
       }
       return hm;
     }
+
     let arr = [];
     let sum = 6;
     for (let i = 0; i < 100000; i++) {

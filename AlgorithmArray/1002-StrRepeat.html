@@ -15,13 +15,8 @@
 <script>
   ;((e) => {
     // ......
-    document.title = "Title";
-
-    let arr = [];
-    for (let i = 0; i < 100000; i++) {
-      arr.push(Math.floor(Math.random() * i + 1));
-    }
-    document.querySelector("#primary").innerText = "原数组为：" + arr;
+    document.title = "数组求正差值";
+    document.querySelector("#primary").innerText = "原数组为：" + arr + " 求和：" + 1;
     const startTime = performance.now();
     document.querySelector("#exercises").innerText = "基础算法结果索引：" + 1;
     const endTime = performance.now();
