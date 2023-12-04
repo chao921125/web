@@ -1,3 +1,4 @@
+document.title = "diff"
 let div = document.createElement("div");
 div.style.color = "#000";
 div.style.backgroundColor = "#fff";
