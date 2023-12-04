@@ -16,12 +16,12 @@
   ;((e) => {
     document.title = "最长回文子串";
 
-    const basic = (s) => {}
+    // 扩散查找
+    const basic = (s) => {
 
-    let testData = [];
-    for (let i = 0; i < 100000; i++) {
-      testData.push(Math.floor(Math.random() * i + 1));
     }
+
+    let testData = "babadbabadbabad";
     document.querySelector("#primary").innerText = "测试数据：" + testData;
     const startTime = performance.now();
     document.querySelector("#exercises").innerText = "基础算法结果索引：" + 1;
