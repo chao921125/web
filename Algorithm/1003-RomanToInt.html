@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <div id="text">
+    Desc
+  </div>
+  <div id="primary"></div>
+  <div id="exercises"></div>
+  <div id="time"></div>
+</body>
+<script>
+  ;((e) => {
+    document.title = "罗马数字转整数";
+
+    const getNumber = (roman) => {
+      switch (roman) {
+        case "I": return 1;
+        case "V": return 5;
+        case "X": return 10;
+        case "L": return 50;
+        case "C": return 100;
+        case "D": return 500;
+        case "M": return 1000;
+        default: return 0;
+      }
+    }
+
+    const romanToInt = (s) => {
+      const RomanInt = {
+        "I": 1,
+        "V": 5,
+        "X": 10,
+        "L": 50,
+        "C": 100,
+        "D": 500,
+        "M": 1000,
+      }
+      let leftVal = 0;
+      let sum = 0;
+      if (s.length === 1) return RomanInt[s];
+      for (let i = 1; i < s.length; i++) {
+        leftVal = RomanInt[s[i - 1]];
+        let current = RomanInt[s[i]];
+        if (leftVal < current) {
+          leftVal = leftVal * -1;
+        }
+        if (i === s.length - 1) {
+          sum += current;
+        }
+        sum += leftVal;
+      }
+      return sum;
+    }
+
+    let testData = "MCMXCIV";
+    document.querySelector("#primary").innerText = "测试数据：" + testData;
+    const startTime = performance.now();
+    document.querySelector("#exercises").innerText = "基础算法结果：" + romanToInt(testData);
+    const endTime = performance.now();
+    document.querySelector("#time").innerText = "耗时：" + (endTime - startTime) + "ms";
+  })(window);
+</script>
+</html>
