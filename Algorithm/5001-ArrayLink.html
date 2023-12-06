@@ -26,6 +26,73 @@
   ;((e) => {
     document.title = "两数相加";
 
+    class neNode {
+      constructor(data) {
+        this.val = data;
+        this.next = null;
+      }
+    }
+    class singleLinkedList {
+      constructor() {
+        this.val = null;
+      }
+      // 添加节点
+      add(data) {
+        let node = new neNode(data);
+        if (this.val === null) {
+          this.val = node;
+        } else {
+          let current = this.val;
+          while (current.next) {
+            current = current.next;
+          }
+          current.next = node;
+        }
+      }
+      // 插入节点
+      insert(data, target) {
+        let node = new neNode(data);
+        let current = this.val;
+        while (current.next) {
+          if (current.val === target) {
+            node.next = current.next;
+            current.next = node;
+            break;
+          }
+          current = current.next;
+        }
+      }
+      // 查找节点
+      find(data) {
+        let current = this.val;
+        while (current) {
+          if (current.val === data) {
+            return current;
+          }
+          current = current.next;
+        }
+        return null;
+      }
+      // 删除节点
+      remove(data) {
+        let current = this.val;
+        let previous = null;
+        while (current) {
+          if (current.val === data) {
+            if (previous === null) {
+              this.val = current.next;
+            } else {
+              previous.next = current.next;
+            }
+            return true;
+          }
+          previous = current;
+          current = current.next;
+        }
+        return false;
+      }
+    }
+
     // 利用反转，非链表
     const addTwoNumbersBasic = (l1, l2) => {
       if (!(l1.length && l2.length)) return;
@@ -40,7 +107,6 @@
       this.next = (next===undefined ? null : next);
     }
     const addTwoNumbers = (l1, l2) => {
-      debugger;
       let dummyHead = new ListNode(0);
       let current = dummyHead;
       let carry = 0;
@@ -64,8 +130,10 @@
       return dummyHead.next;
     }
 
-    const testData1 = [2,4,3];
-    const testData2 = [5,6,4];
+    const testData1 = new singleLinkedList();
+    testData1.add([2,4,3]);
+    const testData2 = new singleLinkedList();
+    testData2.add([5,6,4]);
     document.querySelector("#primary").innerText = "测试数据：" + testData1 + "-" + testData2;
     const startTime = performance.now();
     document.querySelector("#exercises").innerText = "算法结果：" + addTwoNumbers(testData1, testData2);

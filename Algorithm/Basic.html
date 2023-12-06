@@ -24,7 +24,7 @@
     }
     document.querySelector("#primary").innerText = "测试数据：" + testData;
     const startTime = performance.now();
-    document.querySelector("#exercises").innerText = "基础算法结果索引：" + 1;
+    document.querySelector("#exercises").innerText = "基础算法结果：" + basic(testData);
     const endTime = performance.now();
     document.querySelector("#time").innerText = "耗时：" + (endTime - startTime) + "ms";
   })(window);
