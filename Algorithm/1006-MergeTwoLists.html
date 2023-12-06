@@ -12,6 +12,7 @@
   <div id="exercises"></div>
   <div id="time"></div>
 </body>
+<script src="./LinkedList.js"></script>
 <script>
   ;((e) => {
     document.title = "合并两个有序链表";
@@ -46,11 +47,11 @@
       return dummyHead.next;
     }
 
-    let testData1 = new singleLinkedList();
-    let testData2 = new singleLinkedList();
+    let testData1 = new LinkedList();
+    let testData2 = new LinkedList();
     for (let i = 0; i < 10; i++) {
-      testData1.add(Math.floor(Math.random() * i + 1));
-      testData2.add(Math.floor(Math.random() * i + 1));
+      testData1.append(Math.floor(Math.random() * i + 1));
+      testData2.append(Math.floor(Math.random() * i + 1));
     }
     document.querySelector("#primary").innerText = "测试数据：" + testData1 + "=" + testData2;
     const startTime = performance.now();

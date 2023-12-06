@@ -1,15 +1,26 @@
 class ListNode {
-  constructor(value) {
+  constructor(value = 0, next = null) {
     this.value = value;
-    this.next = null;
+    this.next = next;
   }
 }
 
 class LinkedList {
-  constructor() {
+  constructor(head = null) {
+    this.head = head;
+  }
+  size() {
+    let count = 0;
+    let node = this.head;
+    while (node) {
+      count++;
+      node = node.next;
+    }
+    return count;
+  }
+  clear() {
     this.head = null;
   }
-
   // 添加节点到链表末尾
   append(value) {
     let newNode = new ListNode(value);
@@ -39,6 +50,18 @@ class LinkedList {
     }
 
     return null;
+  }
+  findFirst() {
+    return this.head;
+  }
+  findLast() {
+    let lastNode = this.head;
+    if (lastNode) {
+      while (lastNode.next) {
+        lastNode = lastNode.next;
+      }
+    }
+    return lastNode;
   }
 
   // 删除链表中的节点
