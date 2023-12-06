@@ -6,7 +6,28 @@
 </head>
 <body>
   <div id="text">
-    Desc
+    编写一个函数来查找字符串数组中的最长公共前缀。
+
+    如果不存在公共前缀，返回空字符串 ""。
+
+
+
+    示例 1：
+
+    输入：strs = ["flower","flow","flight"]
+    输出："fl"
+    示例 2：
+
+    输入：strs = ["dog","racecar","car"]
+    输出：""
+    解释：输入不存在公共前缀。
+
+
+    提示：
+
+    1 <= strs.length <= 200
+    0 <= strs[i].length <= 200
+    strs[i] 仅由小写英文字母组成
   </div>
   <div id="primary"></div>
   <div id="exercises"></div>
@@ -30,7 +51,7 @@
     }
 
     const romanToInt = (s) => {
-      const RomanInt = {
+      const RomanIntEnum = {
         "I": 1,
         "V": 5,
         "X": 10,
@@ -41,10 +62,10 @@
       }
       let leftVal = 0;
       let sum = 0;
-      if (s.length === 1) return RomanInt[s];
+      if (s.length === 1) return RomanIntEnum[s];
       for (let i = 1; i < s.length; i++) {
-        leftVal = RomanInt[s[i - 1]];
-        let current = RomanInt[s[i]];
+        leftVal = RomanIntEnum[s[i - 1]];
+        let current = RomanIntEnum[s[i]];
         if (leftVal < current) {
           leftVal = leftVal * -1;
         }

@@ -30,7 +30,7 @@
     document.title = "两数之和求索引";
 
     // 基础解法
-    const twoSumBasic = (nums, target) => {
+    const twoSum1 = (nums, target) => {
       if (!nums.length) return;
       for (let i = 0; i < nums.length; i++) {
         for (let j = i+1; j < nums.length; j++) {
@@ -41,7 +41,7 @@
       }
     }
     // 最优解
-    const twoSumMap = (nums, target) => {
+    const twoSum = (nums, target) => {
       if (!nums.length) return;
       let hm = new Map();
       for (let i = 0; i < nums.length; i++) {
@@ -60,13 +60,9 @@
     }
     document.querySelector("#primary").innerText = "测试数据：" + testData + " 求和：" + testDataSum;
     const startTime = performance.now();
-    document.querySelector("#exercises").innerText = "基础算法结果：" + twoSumBasic(testData, testDataSum);
+    document.querySelector("#exercises").innerText = "基础算法结果：" + twoSum(testData, testDataSum);
     const endTime = performance.now();
     document.querySelector("#time").innerText = "耗时：" + (endTime - startTime) + "ms";
-    const startTime1 = performance.now();
-    document.querySelector("#exercises1").innerText = "Map算法结果：" + twoSumMap(testData, testDataSum);
-    const endTime1 = performance.now();
-    document.querySelector("#time1").innerText = "耗时：" + (endTime1 - startTime1) + "ms";
   })(window);
 </script>
 </html>

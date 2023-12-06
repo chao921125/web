@@ -20,14 +20,14 @@
   ;((e) => {
     document.title = "回文数";
 
-    const isPalindromeBasic = (x) => {
+    const isPalindromeReverse1 = (x) => {
       const str = String(x);
       for (let i = 0, j = str.length - 1; i < str.length; i++) {
         if (str[i] !== str[j - i]) return false;
       }
       return true;
     }
-    const isPalindromeReverse1 = (x) => {
+    const isPalindromeReverse2 = (x) => {
       if (x < 0) return false;
       let val = x;
       let reVal = 0;
