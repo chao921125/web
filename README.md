@@ -18,3 +18,6 @@
 [电影、电视配乐](https://www.tunefind.com/)
 
 https://www.zkdh.net/favorites/xiaoshuoruan
+
+免费的AI写作帮手
+https://www.writingo.net/invitation?key=Umvr258HpYg5
