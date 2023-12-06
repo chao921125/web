@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <div id="text">
+    将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。
+  </div>
+  <div id="primary"></div>
+  <div id="exercises"></div>
+  <div id="time"></div>
+</body>
+<script>
+  ;((e) => {
+    document.title = "合并两个有序链表";
+
+    class neNode {
+      constructor(data) {
+        this.val = data;
+        this.next = null;
+      }
+    }
+    class singleLinkedList {
+      constructor() {
+        this.val = null;
+        this.length = 0;
+      }
+      // 获取链表中索引所对应的元素
+      getElementAt(index) {
+        if (index < 0 || index >= this.length) return null;
+        let cur = this.val;
+        while (index--) {
+          cur = cur.next;
+        }
+        return cur;
+      }
+      find(val) {
+        let cur = this.val;
+        while (cur) {
+          if (cur.val === val) return cur;
+          cur = cur.next;
+        }
+        return null;
+      }
+      append(val) {
+        let node = new ListNode(val)
+      }
+    }
+
+    function ListNode(val = 0, next = null) {
+      this.val = (val===undefined ? 0 : val);
+      this.next = (next===undefined ? null : next);
+    }
+
+    const basic = (list1, list2) => {
+      if (list1.length > list2.length) {
+        [list1, list2] = [list2, list1];
+      }
+
+      let dummyHead = new ListNode(0);
+      let current = dummyHead;
+
+      while (list1 !== null && list2 !== null) {
+
+        if (list1.val <= list2.val) {
+          current.next = list1;
+          list1 = list1.next;
+        } else {
+          current.next = list2;
+          list2 = list2.next;
+        }
+
+        current = current.next;
+      }
+
+      current.next = list1 === null ? list2 : list1;
+      return dummyHead.next;
+    }
+
+    let testData1 = new singleLinkedList();
+    let testData2 = new singleLinkedList();
+    for (let i = 0; i < 10; i++) {
+      testData1.add(Math.floor(Math.random() * i + 1));
+      testData2.add(Math.floor(Math.random() * i + 1));
+    }
+    document.querySelector("#primary").innerText = "测试数据：" + testData1 + "=" + testData2;
+    const startTime = performance.now();
+    document.querySelector("#exercises").innerText = "基础算法结果：" + basic(testData1, testData2);
+    const endTime = performance.now();
+    document.querySelector("#time").innerText = "耗时：" + (endTime - startTime) + "ms";
+  })(window);
+</script>
+</html>
