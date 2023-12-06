@@ -16,39 +16,6 @@
   ;((e) => {
     document.title = "合并两个有序链表";
 
-    class neNode {
-      constructor(data) {
-        this.val = data;
-        this.next = null;
-      }
-    }
-    class singleLinkedList {
-      constructor() {
-        this.val = null;
-        this.length = 0;
-      }
-      // 获取链表中索引所对应的元素
-      getElementAt(index) {
-        if (index < 0 || index >= this.length) return null;
-        let cur = this.val;
-        while (index--) {
-          cur = cur.next;
-        }
-        return cur;
-      }
-      find(val) {
-        let cur = this.val;
-        while (cur) {
-          if (cur.val === val) return cur;
-          cur = cur.next;
-        }
-        return null;
-      }
-      append(val) {
-        let node = new ListNode(val)
-      }
-    }
-
     function ListNode(val = 0, next = null) {
       this.val = (val===undefined ? 0 : val);
       this.next = (next===undefined ? null : next);
