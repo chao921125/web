@@ -23,6 +23,7 @@
     }
 
     const basic = (list1, list2) => {
+      debugger
       if (list1.length > list2.length) {
         [list1, list2] = [list2, list1];
       }
@@ -44,6 +45,7 @@
       }
 
       current.next = list1 === null ? list2 : list1;
+      debugger
       return dummyHead.next;
     }
 
@@ -53,9 +55,11 @@
       testData1.append(Math.floor(Math.random() * i + 1));
       testData2.append(Math.floor(Math.random() * i + 1));
     }
-    document.querySelector("#primary").innerText = "测试数据：" + testData1 + "=" + testData2;
+    document.querySelector("#primary").innerText = "测试数据：" + testData1.print() + "=" + testData2.print();
+    let result = new LinkedList();
     const startTime = performance.now();
-    document.querySelector("#exercises").innerText = "基础算法结果：" + basic(testData1, testData2);
+    result.head = basic(testData1.head, testData2.head);
+    document.querySelector("#exercises").innerText = "基础算法结果：" + result.print();
     const endTime = performance.now();
     document.querySelector("#time").innerText = "耗时：" + (endTime - startTime) + "ms";
   })(window);

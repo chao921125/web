@@ -1,90 +1,119 @@
-class ListNode {
-  constructor(value = 0, next = null) {
-    this.value = value;
-    this.next = next;
-  }
+/**
+ * JS Linked-List for es5 & es6
+ * @Auth CC
+ */
+
+function ListNode(val = 0) {
+  this.val = val;
+  this.next = null;
 }
 
-class LinkedList {
-  constructor(head = null) {
-    this.head = head;
+function LinkedList() {
+  this.head = null;
+}
+
+LinkedList.prototype.size = function () {
+  let count = 0;
+  let node = this.head;
+  while (node) {
+    count++;
+    node = node.next;
   }
-  size() {
-    let count = 0;
-    let node = this.head;
-    while (node) {
-      count++;
-      node = node.next;
-    }
-    return count;
+  return count;
+}
+LinkedList.prototype.isEmpty = function () {
+  let node = this.head;
+  return node.next === null;
+}
+LinkedList.prototype.append = function (val) {
+  let newNode = new ListNode(val);
+  if (!this.head) {
+    this.head = newNode;
+    return;
   }
-  clear() {
-    this.head = null;
+  let current = this.head;
+  while (current.next) {
+    current = current.next;
   }
-  // 添加节点到链表末尾
-  append(value) {
-    let newNode = new ListNode(value);
-
-    if (!this.head) {
-      this.head = newNode;
-      return;
+  current.next = newNode;
+}
+LinkedList.prototype.inset = function (index, val) {}
+LinkedList.prototype.prepend = function (val) {
+  let newNode = new ListNode(val);
+  newNode.next = this.head;
+  this.head = newNode;
+}
+LinkedList.prototype.update = function (index, val) {}
+LinkedList.prototype.find = function (val) {
+  let current = this.head;
+  while (current) {
+    if (current.val === val) {
+      return current;
     }
-
-    let current = this.head;
-    while (current.next) {
-      current = current.next;
-    }
-
-    current.next = newNode;
+    current = current.next;
   }
-
-  // 在链表中查找值
-  find(value) {
-    let current = this.head;
-
-    while (current) {
-      if (current.value === value) {
-        return current;
-      }
-      current = current.next;
+  return null;
+}
+LinkedList.prototype.findFirst = function () {
+  return this.head;
+}
+LinkedList.prototype.findLast = function () {
+  let lastNode = this.head;
+  if (lastNode) {
+    while (lastNode.next) {
+      lastNode = lastNode.next;
     }
-
+  }
+  return lastNode;
+}
+LinkedList.prototype.remove = function (val) {
+  if (!this.head) {
     return null;
   }
-  findFirst() {
-    return this.head;
+  if (this.head.val === val) {
+    this.head = this.head.next;
+    return;
   }
-  findLast() {
-    let lastNode = this.head;
-    if (lastNode) {
-      while (lastNode.next) {
-        lastNode = lastNode.next;
-      }
-    }
-    return lastNode;
-  }
-
-  // 删除链表中的节点
-  remove(value) {
-    if (!this.head) {
-      return null;
-    }
-
-    if (this.head.value === value) {
-      this.head = this.head.next;
+  let current = this.head;
+  while (current.next) {
+    if (current.next.val === val) {
+      current.next = current.next.next;
       return;
     }
-
-    let current = this.head;
-    while (current.next) {
-      if (current.next.value === value) {
-        current.next = current.next.next;
-        return;
-      }
-      current = current.next;
-    }
+    current = current.next;
   }
-
-  // 其他方法，例如打印链表、反转链表等
 }
-export default LinkedList;
+LinkedList.prototype.removeAt = function (index) {}
+LinkedList.prototype.clear = function () {
+  this.head = null;
+}
+LinkedList.prototype.indexOf = function (val) {}
+LinkedList.prototype.toString = function () {}
+LinkedList.prototype.forwardString = function () {}
+LinkedList.prototype.backwordString = function () {}
+LinkedList.prototype.print = function () {
+  let current = this.head;
+  let result = '';
+  while (current) {
+    result += `${current.val} -> `;
+    current = current.next;
+  }
+  return result;
+}
+
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+  module.exports = {
+    LinkedList: LinkedList,
+    ListNode: ListNode // 如果需要导出 ListNode
+  };
+} else if (typeof define === 'function' && define.amd) {
+  define([], function() {
+    return {
+      LinkedList: LinkedList,
+      ListNode: ListNode
+    };
+  });
+} else {
+  window.LinkedList = LinkedList;
+  window.ListNode = ListNode;
+}
