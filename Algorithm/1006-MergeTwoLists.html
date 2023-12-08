@@ -23,11 +23,6 @@
     }
 
     const basic = (list1, list2) => {
-      debugger
-      if (list1.length > list2.length) {
-        [list1, list2] = [list2, list1];
-      }
-
       let dummyHead = new ListNode(0);
       let current = dummyHead;
 
@@ -45,15 +40,14 @@
       }
 
       current.next = list1 === null ? list2 : list1;
-      debugger
       return dummyHead.next;
     }
 
     let testData1 = new LinkedList();
     let testData2 = new LinkedList();
     for (let i = 0; i < 10; i++) {
-      testData1.append(Math.floor(Math.random() * i + 1));
-      testData2.append(Math.floor(Math.random() * i + 1));
+      testData1.append(i);
+      testData2.append(i + i);
     }
     document.querySelector("#primary").innerText = "测试数据：" + testData1.print() + "=" + testData2.print();
     let result = new LinkedList();
