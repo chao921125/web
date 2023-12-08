@@ -22,3 +22,5 @@ MusicPlayer2 音乐播放器【仅限于Win】：https://github.com/zhongyang219
 国外音乐【听，下，仅限于Mac】：https://github.com/kartik-venugopal/aural-player
 国外音乐【听，下，仅限于Apk】：https://github.com/vfsfitvnm/ViMusic
 国外音乐【听，下，仅限于Apk】：https://github.com/RetroMusicPlayer/RetroMusicPlayer
+
+B站下载【下载/去水印】：https://github.com/leiurayer/downkyi
