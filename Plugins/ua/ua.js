@@ -3,20 +3,20 @@
  * @Auth CC
  */
 
-function LinkedList() {
-  this.head = null;
+function UaInfo() {
+  this.browser = null;
 }
 
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
   module.exports = {
-    LinkedList: LinkedList,
+    UaInfo: UaInfo,
   };
 } else if (typeof define === 'function' && define.amd) {
   define([], function() {
     return {
-      LinkedList: LinkedList,
+      UaInfo: UaInfo,
     };
   });
 } else {
-  window.LinkedList = LinkedList;
+  window.UaInfo = UaInfo;
 }
