@@ -54,13 +54,13 @@
     }
 
     let testData = [];
-    let testDataSum = 6;
+    let testValue = 6;
     for (let i = 0; i < 100000; i++) {
       testData.push(Math.floor(Math.random() * i + 1));
     }
-    document.querySelector("#primary").innerText = "测试数据：" + testData + " 求和：" + testDataSum;
+    document.querySelector("#primary").innerText = "测试数据：" + testData + " 求和：" + testValue;
     const startTime = performance.now();
-    document.querySelector("#exercises").innerText = "基础算法结果：" + twoSum(testData, testDataSum);
+    document.querySelector("#exercises").innerText = "基础算法结果：" + twoSum(testData, testValue);
     const endTime = performance.now();
     document.querySelector("#time").innerText = "耗时：" + (endTime - startTime) + "ms";
   })(window);
